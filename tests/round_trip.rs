@@ -31,8 +31,8 @@ impl Header {
 
         bytes.put_u8(b1);
         bytes.put_u8(b2);
-        bytes.put_u16_be(self.sequence);
-        bytes.put_u32_be(self.timestamp);
+        bytes.put_u16(self.sequence);
+        bytes.put_u32(self.timestamp);
 
         for _ in 0..payload_size {
             bytes.put_u8(0xAB);
@@ -45,8 +45,8 @@ impl Header {
 fn round_trip(policy: CryptoPolicy) {
     let key: Vec<_> = (0u8..50).collect();
 
-    let mut inbound = Srtp::new(SsrcType::AnyInbound, policy, policy, &key).unwrap();
-    let mut outbound = Srtp::new(SsrcType::AnyOutbound, policy, policy, &key).unwrap();
+    let inbound = Srtp::new(SsrcType::AnyInbound, policy, policy, &key).unwrap();
+    let outbound = Srtp::new(SsrcType::AnyOutbound, policy, policy, &key).unwrap();
 
     for sequence in 0x1234..0x1434 {
         let input = Header {
