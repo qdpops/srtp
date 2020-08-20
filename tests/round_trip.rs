@@ -45,8 +45,8 @@ impl Header {
 fn round_trip(policy: CryptoPolicy) {
     let key: Vec<_> = (0u8..50).collect();
 
-    let inbound = Srtp::new(SsrcType::AnyInbound, policy, policy, &key).unwrap();
-    let outbound = Srtp::new(SsrcType::AnyOutbound, policy, policy, &key).unwrap();
+    let mut inbound = Srtp::new(SsrcType::AnyInbound, policy, policy, &key).unwrap();
+    let mut outbound = Srtp::new(SsrcType::AnyOutbound, policy, policy, &key).unwrap();
 
     for sequence in 0x1234..0x1434 {
         let input = Header {
