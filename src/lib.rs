@@ -1,7 +1,7 @@
 
 extern crate srtp2_sys as sys;
 
-use bytes::{BytesMut};
+use smallvec::{SmallVec, Array};
 
 #[derive(Debug)]
 pub struct Srtp {
@@ -115,7 +115,7 @@ impl Srtp {
         }
     }
 
-    pub fn protect(&mut self, data: &mut BytesMut) -> Result<(), Error> {
+    pub fn protect<T: Array>(&mut self, data: &mut SmallVec<T>) -> Result<(), Error> {
         unsafe {
             data.reserve(MAX_TRAILER_LEN);
             let mut len = data.len() as _;
@@ -125,7 +125,7 @@ impl Srtp {
         Ok(())
     }
 
-    pub fn protect_rtcp(&mut self, data: &mut BytesMut) -> Result<(), Error> {
+    pub fn protect_rtcp<T: Array>(&mut self, data: &mut SmallVec<T>) -> Result<(), Error> {
         unsafe {
             data.reserve(MAX_TRAILER_LEN);
             let mut len = data.len() as _;
@@ -135,7 +135,7 @@ impl Srtp {
         Ok(())
     }
 
-    pub fn unprotect(&mut self, data: &mut BytesMut) -> Result<(), Error> {
+    pub fn unprotect<T: Array>(&mut self, data: &mut SmallVec<T>) -> Result<(), Error> {
         unsafe {
             let mut len = data.len() as _;
             check(sys::srtp_unprotect(self.inner, data.as_mut_ptr() as *mut _, &mut len))?;
@@ -144,7 +144,7 @@ impl Srtp {
         Ok(())
     }
 
-    pub fn unprotect_rtcp(&mut self, data: &mut BytesMut) -> Result<(), Error> {
+    pub fn unprotect_rtcp<T: Array>(&mut self, data: &mut SmallVec<T>) -> Result<(), Error> {
         unsafe {
             let mut len = data.len() as _;
             check(sys::srtp_unprotect_rtcp(self.inner, data.as_mut_ptr() as *mut _, &mut len))?;
