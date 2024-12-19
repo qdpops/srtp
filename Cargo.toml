@@ -12,7 +12,7 @@ categories = ["multimedia", "network-programming"]
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-srtp2-sys = "2.30"
+srtp2-sys = "2.3.0"
 smallvec = "1.4"
 
 [dev-dependencies]
